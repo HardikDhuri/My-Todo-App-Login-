@@ -1,0 +1,37 @@
+{% extends 'users/layout.html' %}
+{%  load crispy_forms_tags %}
+{% block body %}
+
+<div class="container pt-5 ">
+    {% if user.is_authenticated %}
+    <p style="text: 'center'">User: {{ user.get_username }}</p>
+    <div class="container">
+        <form method="post">
+            {% csrf_token %}
+            <fieldset class="form-group">
+                <legend class="border-bottom mb-4" >Create Task</legend>
+                {{ form|crispy }}
+            </fieldset>
+            <div class="form-group">
+                <button type="submit" class="btn btn-primary">Add</button>
+            </div>
+        </form>
+    </div>
+    {% else %}
+        <a href="{% url 'login' %}">Login Here</a>
+    {% endif %}
+    <div class = "container">
+        <ul>
+            {% for task in tasks %}
+            {% if task in user.tasks.all %}
+                <li>{{ task.name }}</li>
+            {% endif %}
+            {% empty %}
+                <li>No Tasks for Today</li>
+            {% endfor %}
+        </ul>
+
+    </div>
+
+</div>
+{% endblock %}
